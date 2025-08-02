@@ -1,33 +1,46 @@
-let input = document.querySelector('.txt-input');
-let content = document.querySelector('.content');
+const input = document.querySelector('.txt-input');
+const content = document.querySelector('.content');
 
 input.addEventListener('keydown', handleCommand);
 
-// 🔧 تابع نمایش ساعت تهران
 function getTehranTime() {
   const now = new Date();
-  const tehranTime = now.toLocaleString('en-GB', {
+  return now.toLocaleString('en-GB', {
     timeZone: 'Asia/Tehran',
     hour12: false,
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
   });
-  return tehranTime;
 }
 
-// 👋 هنگام بارگذاری، نمایش ساعت تهران
 window.onload = () => {
-  const time = getTehranTime();
-  content.innerHTML += `🕰 Tehran time: <span class="cmd-txt">${time}</span><br><br>`;
-  input.focus();
+  const splash = document.getElementById('splash-screen');
+  setTimeout(() => {
+    splash.style.display = 'none';
+    const time = getTehranTime();
+    appendToContent(
+      `<p class="welcome-txt">Welcome to my terminal.</p>` +
+      `<p class="welcome-txt">For a list of the commands, type <span class="help-txt">"help"</span>.</p>` +
+      `<p class="welcome-txt">Tehran time: <span class="cmd-txt">${time}</span></p>`
+    );
+    focusInput();
+  }, 2500);
 };
+
+function focusInput() {
+  input.focus();
+}
+
+function appendToContent(html) {
+  content.innerHTML += html;
+}
 
 function handleCommand(event) {
   if (event.key === 'Enter') {
     const command = input.value.trim();
     input.value = '';
-    content.innerHTML += `$ ${command}<br>`;
+    appendToContent(`$ ${command}<br>`);
     executeCommand(command);
   }
 }
@@ -35,11 +48,20 @@ function handleCommand(event) {
 function executeCommand(command) {
   switch (command) {
     case "help":
-      content.innerHTML += '<p class="dummy-txt">Available commands: <span class="cmd-txt">help</span>, <span class="cmd-txt">sendMessage</span>, <span class="cmd-txt">clear</span>, <span class="cmd-txt">updates</span>, <span class="cmd-txt">aboutMe</span>, <span class="cmd-txt">exit</span></p><br>';
+      appendToContent(`
+        <p class="dummy-txt">Available commands:
+          <span class="cmd-txt">help</span>,
+          <span class="cmd-txt">sendMessage</span>,
+          <span class="cmd-txt">clear</span>,
+          <span class="cmd-txt">updates</span>,
+          <span class="cmd-txt">aboutMe</span>,
+          <span class="cmd-txt">exit</span>
+        </p><br>
+      `);
       break;
 
     case "sendMessage":
-      content.innerHTML += "Type your message and press Enter:<br>";
+      appendToContent("Type your message and press Enter:<br>");
       input.removeEventListener('keydown', handleCommand);
       input.addEventListener('keydown', handleSendMessage);
       break;
@@ -49,69 +71,68 @@ function executeCommand(command) {
       break;
 
     case "exit":
-      content.innerHTML += "Closing tab...<br>";
-      setTimeout(() => {
-        window.close();
-      }, 1000);
+      appendToContent("Closing tab...<br>");
+      setTimeout(() => window.close(), 1000);
       break;
 
     case "aboutMe":
-      let aboutMe = document.createElement('div');
-      aboutMe.classList.add('about-me');
-      aboutMe.innerHTML = `
-      <span class="about-txt">
-        Hello visitor,<br> My name is Ahmad. I am a web developer...<br>
-        LinkedIn: <a href="https://www.linkedin.com/in/ahmad-shirzadi/" target="_blank">here</a><br>
-        GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
-      </span>`;
-      content.appendChild(aboutMe);
+      const aboutMe = `
+        <div class="about-me">
+          <span class="about-txt">
+            Hello visitor,<br>
+            My name is Ahmad. I am a web developer...<br>
+            LinkedIn: <a href="https://www.linkedin.com/in/ahmad-shirzadi/" target="_blank">here</a><br>
+            GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
+          </span>
+        </div>
+      `;
+      appendToContent(aboutMe);
       break;
 
     case "updates":
-      let updates = document.createElement('div');
-      updates.classList.add('about-me');
-      updates.innerHTML = `
-      <span class="about-txt">
-        Updates:<br>
-        - New feature: Send message directly to my Telegram via "sendMessage"<br>
-      </span>`;
-      content.appendChild(updates);
+      const updates = `
+        <div class="about-me">
+          <span class="about-txt">
+            Updates:<br>
+            - New feature: Send message directly to my Telegram via "sendMessage"<br>
+          </span>
+        </div>
+      `;
+      appendToContent(updates);
       break;
 
     default:
-      content.innerHTML += `Unknown command: ${command}, type help for commands.<br>`;
+      appendToContent(`Unknown command: ${command}, type help for commands.<br>`);
   }
-
-  input.focus();
+  focusInput();
 }
 
 function handleSendMessage(event) {
   if (event.key === 'Enter') {
     const message = input.value.trim();
     input.value = '';
-    content.innerHTML += `<span class="sent-msg">Sending message: "${message}"...</span><br>`;
+    appendToContent(`<span class="sent-msg">Sending message: "${message}"...</span><br>`);
 
     fetch('/api/send', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
     })
     .then(res => res.json())
     .then(data => {
       if (data.ok) {
-        content.innerHTML += `<span class="sent-msg">Message sent successfully ✔️</span><br>`;
+        appendToContent(`<span class="sent-msg">Message sent successfully ✔️</span><br>`);
       } else {
-        content.innerHTML += `<span class="error-msg">Failed to send message ❌</span><br>`;
+        appendToContent(`<span class="error-msg">Failed to send message ❌</span><br>`);
       }
     })
-    .catch(err => {
-      content.innerHTML += `<span class="error-msg">Request error ❌</span><br>`;
+    .catch(() => {
+      appendToContent(`<span class="error-msg">Request error ❌</span><br>`);
+    })
+    .finally(() => {
+      input.removeEventListener("keydown", handleSendMessage);
+      input.addEventListener("keydown", handleCommand);
+      focusInput();
     });
-
-    input.removeEventListener("keydown", handleSendMessage);
-    input.addEventListener("keydown", handleCommand);
-    input.focus();
   }
 }
