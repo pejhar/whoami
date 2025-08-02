@@ -1,0 +1,17 @@
+node_modules/
+.env
+.DS_Store
+*.log
+.wrangler/
+*wrangler.toml
+.xdg.config/
+.idea/
+.vscode/
+*.sqlite
+*.db
+*.local
+*.cache
+*.tmp
+*.bak
+npm-debug.log*
+yarn-error.log*
