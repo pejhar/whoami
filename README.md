@@ -113,7 +113,7 @@ The application can be tested locally using `npx wrangler pages dev public`. Thi
 
 ## 👤 About Me
 
-Ahmad Shirzadi is a passionate web developer with expertise in building minimalist and efficient web applications. Connect with Ahmad on:
+Ahmad Shirzadi is a passionate software engineer with expertise in building minimalist and efficient web applications. Connect with Ahmad on:
 
 *   **LinkedIn**: [linkedin.com/in/ahmad-shirzadi](https://www.linkedin.com/in/ahmad-shirzadi/)
 *   **GitHub**: [github.com/pejhar](https://github.com/pejhar)
