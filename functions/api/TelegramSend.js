@@ -15,7 +15,6 @@ export async function onRequestPost(context) {
       throw new Error("No message provided in request body.");
     }
 
-    // ✅ گرفتن آی‌پی و Geo از request.cf
     const ip = context.request.headers.get("cf-connecting-ip") || "Unavailable";
     const cf = context.request.cf || {};
     const city = cf.city || "N/A";
