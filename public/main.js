@@ -16,12 +16,19 @@ function getTehranTime() {
 
 window.onload = () => {
   const splash = document.getElementById('splash-screen');
+  const dots = document.querySelector('.splash-dots');
+  let dotCount = 0;
+  let dotInterval = setInterval(() => {
+    dotCount = (dotCount + 1) % 4;
+    dots.textContent = '.'.repeat(dotCount);
+  }, 350);
   setTimeout(() => {
+    clearInterval(dotInterval);
     splash.style.display = 'none';
     const time = getTehranTime();
     appendToContent(
       `<p class="welcome-txt">Welcome to my terminal.</p>` +
-      `<p class="welcome-txt">For a list of the commands, type <span class="help-txt">"help"</span>.</p>` +
+      `<p class="welcome-txt">For a list of the commands, type <span class="help-txt">\"help\"</span>.</p>` +
       `<p class="welcome-txt">Tehran time: <span class="cmd-txt">${time}</span></p>`
     );
     focusInput();
