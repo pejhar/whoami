@@ -1,74 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index, follow" />
+  <title>whoami</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon_v2.png" />
-  <title>whoami</title>
 </head>
+
 <body>
   <div id="splash-screen">
     <span class="splash-glitch">LOADING<span class="splash-cursor">|</span></span>
   </div>
 
-  <div class="main-wrapper">
-    <div class="art-section">
+  <nav class="mobile-nav">
+    <button class="burger-menu" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <span style="color:#D28F4B;">Common Commands:</span>
+    </div>
+  </nav>
+
+  <main class="main-wrapper">
+    <section class="art-section">
       <div class="art">
-        <pre>
-/*   _                              _
-    / \  | |__  _ __ ___   __ _  __| |
-   / _ \ | '_ \| '_ ` _ \ / _` |/ _` |
-  / ___ \| | | | | | | | | (_| | (_| |
- /_/__ \_\_| |_|_| |_| |_|\__,_|\__,_|
- / ___|| |__ (_)_ __ ______ _  __| (_)
- \___ \| '_ \| | '__|_  / _` |/ _` | |
-  ___) | | | | | |   / / (_| | (_| | |
- |____/|_| |_|_|_|  /___\__,_|\__,_|_|
-*/
-</pre>
+        <pre aria-label="ascii art" tabindex="0">
+            __ 
+          .'  '. 
+         :      :
+         | _  _ |
+      .-.|(o)(o)|.-.        _._          _._
+     ( ( | .--. | ) )     .',_ '.      .' _,'.
+      '-/ (    ) \-'     / /' `\ \ __ / /' `\ \
+       /   '--'   \     / /     \.'  './     \ \
+       \ `"===="` /     `-`     : _  _ :      `-`
+        `\      /'              |(o)(o)|
+          `\  /'                |      |
+          /`-.-`\_             /        \
+    _..:;\._/V\_./:;.._       /   .--.   \
+  .'/;:;:;\ /^\ /:;:;:\'.     |  (    )  | 
+ / /;:;:;:;\| |/:;:;:;:\ \    _\  '--'  /__
+/ /;:;:;:;:;\_/:;:;:;:;:\ \ .'  '-.__.-'   `-.
+        </pre>
       </div>
 
-      <div class="fixed-welcome-help">
-        <p class="welcome-txt">Welcome to my AI terminal.</p>
-        <p class="welcome-txt">Tehran time: <span class="cmd-txt" id="tehran-time"></span></p>
-        <div class="help-box">
+      <aside class="fixed-welcome-help">
+        <div class="help-box" aria-label="Terminal Commands">
           <span><br>Common Commands:</span>
-          <div><a href="#" class="help-txt" data-command="sendMessage">sendMessage</a> <span>Send a DM to my Telegram</span></div>
-          <div><a href="#" class="help-txt" data-command="clear">clear</a> <span>Clear the terminal screen</span></div>
-          <div><a href="#" class="help-txt" data-command="updates">updates</a> <span>Show recent updates</span></div>
-          <div><a href="#" class="help-txt" data-command="aboutMe">aboutMe</a> <span>Show brief info about me</span></div>
-          <div><a href="#" class="help-txt" data-command="exit">exit</a> <span>Close the terminal</span></div>
         </div>
-      </div>
+      </aside>
+    </section>
+
+    <section class="content" id="terminal-content"></section>
+  </main>
+
+  <template id="commands-template">
+    <div><a href="#" class="feature-column" data-command="sendMessage">sendMessage</a> <span>Send a DM to my
+        Telegram</span></div>
+    <div><a href="#" class="feature-column" data-command="clear">clear</a> <span>Clear the terminal screen</span></div>
+    <div><a href="#" class="feature-column" data-command="updates">updates</a> <span>Show recent updates</span></div>
+    <div><a href="#" class="feature-column" data-command="aboutMe">aboutMe</a> <span>Show brief info about me</span>
     </div>
+    <div><a href="#" class="feature-column" data-command="exit">exit</a> <span>Close the terminal</span></div>
+  </template>
 
-    <div class="content" id="terminal-content"></div>
-  </div>
-
-  <div id="txt">
-    <p class="path"><span class="prompt-symbol">visitor@koregeloo.ir:~$</span></p>
-    <div class="cursor">
-      <input type="text" class="txt-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <i></i>
-    </div>
-  </div>
-
-  <script>
-    function updateTehranTime() {
-      const now = new Date();
-      document.getElementById('tehran-time').textContent = now.toLocaleTimeString('en-GB', {
-        timeZone: 'Asia/Tehran', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-    }
-    updateTehranTime();
-    setInterval(updateTehranTime, 1000);
-  </script>
   <script src="main.js"></script>
 </body>
+
 </html>
