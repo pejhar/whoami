@@ -2,19 +2,34 @@ window.addEventListener('DOMContentLoaded', () => {
   const burgerButton = document.querySelector('.burger-menu');
   const mobileMenu = document.getElementById('mobile-menu');
   const content = document.querySelector('#terminal-content');
-
   const commandsTemplate = document.getElementById('commands-template');
-  const commandsHTML = commandsTemplate.innerHTML;
+  const overlay = document.getElementById('overlay');
+  const splash = document.getElementById('splash-screen');
 
-  mobileMenu.insertAdjacentHTML('beforeend', commandsHTML);
-
+  mobileMenu.insertAdjacentHTML('beforeend', commandsTemplate.innerHTML);
   const helpBox = document.querySelector('.help-box');
   if (helpBox) {
-    helpBox.insertAdjacentHTML('beforeend', commandsHTML);
+    helpBox.insertAdjacentHTML('beforeend', commandsTemplate.innerHTML);
   }
 
-  let chatMessages = [{ role: "system", content: "You are a helpful assistant." }];
+  let chatMessages = [{ role: "system", content: "You are a helpful assistant that responds in JSON format." }];
   let currentInputMode = 'command';
+
+  function openMobileMenu() {
+    mobileMenu.classList.add('active');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    burgerButton.classList.add('active');
+    burgerButton.setAttribute('aria-expanded', 'true');
+    overlay.classList.add('active');
+  }
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('active');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    burgerButton.classList.remove('active');
+    burgerButton.setAttribute('aria-expanded', 'false');
+    overlay.classList.remove('active');
+  }
 
   function removeExistingPrompt() {
     const existing = content.querySelector('.prompt-line');
@@ -40,24 +55,29 @@ window.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Enter') {
         e.preventDefault();
         const command = inputEl.value.trim();
-        if (!command) return;
+        if (!command) {
+          if (currentInputMode === 'sendMessage') {
+            appendToContent(`<span class="error-msg">No message entered. Returning to command mode.</span><br><br>`);
+            currentInputMode = 'command';
+          }
+          createPromptInput();
+          return;
+        }
         inputEl.disabled = true;
-
+        removeExistingPrompt();
+        appendToContentCommand(command);
         if (currentInputMode === 'sendMessage') {
           await handleSendMessage(command);
         } else {
-          appendToContentCommand(command);
           await executeCommand(command);
         }
       } else if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
         closeMobileMenu();
       }
     });
-
     inputEl.focus();
   }
 
-  // اضافه کردن دستور همراه prompt به ترمینال
   function appendToContentCommand(command) {
     const wrapper = document.createElement('div');
     wrapper.className = 'entry';
@@ -96,71 +116,115 @@ window.addEventListener('DOMContentLoaded', () => {
           break;
         case 'aboutme':
           appendToContent(`
-            <div class="about-me">
-              <span class="about-txt">
-                Hello visitor,<br>
-                My name is Ahmad Shirzadi. I am a Software Engineer.<br>
-                LinkedIn: <a href="https://www.linkedin.com/in/ahmad-shirzadi/" target="_blank">here</a><br>
-                GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
-                CV: <a href="/cv_ahmad_shirzadi_august_2025.pdf" target="_blank" download>Download my CV (PDF)</a><br><br>
-              </span>
-            </div>
-          `);
+          <div class="about-me">
+            <span class="about-txt">
+              Hello visitor,<br>
+              My name is Ahmad Shirzadi. I am a Software Engineer.<br>
+              LinkedIn: <a href="https://www.linkedin.com/in/ahmad-shirzadi/" target="_blank">here</a><br>
+              GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
+              CV: <a href="/cv_ahmad_shirzadi_august_2025.pdf" target="_blank" download>Download my CV (PDF)</a><br><br>
+            </span>
+          </div>
+        `);
           break;
         case 'updates':
           appendToContent(`
-            <div class="about-me">
-              <span class="about-txt">
-                Latest updates:<br>
-                - AI assistant integrated into the terminal.<br>
-                - Ability to send messages directly to Telegram.<br>
-                Stay tuned for more features!<br><br>
-              </span>
-            </div>
-          `);
+          <div class="about-me">
+            <span class="about-txt">
+              Latest updates:<br>
+              - AI assistant integrated into the terminal.<br>
+              - Chat Crash Reporter.<br>
+              - Ability to send messages directly to Telegram.<br>
+              Stay tuned for more features!<br><br>
+            </span>
+          </div>
+        `);
           break;
-
       }
       createPromptInput();
     } else {
       appendToContent('<span class="ai-thinking">$ Processing...</span>');
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/api/openRouterMessage', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             messages: [
               ...chatMessages,
-              { role: "user", content: command }
+              { role: "user", content: `${command} (please respond in JSON format)` }
             ]
           })
         });
 
         const data = await response.json();
-        const aiReply = data.result.response;
+        if (data.error) {
+          let errorMsg = data.error;
+          if (response.status === 402) {
+            errorMsg = "Insufficient account balance. Please recharge your OpenRouter account.";
+          } else if (response.status === 429) {
+            errorMsg = "Too many requests. Please wait a few minutes.";
+          } else if (response.status === 401) {
+            errorMsg = "Invalid API key. Please check your settings.";
+          }
 
-        appendToContent(`
-          <div class="ai-response">
-            <span class="ai-prompt">AI@koregeloo:~$</span>
-            <span class="ai-text">${aiReply}</span>
-          </div>
-        `);
+          const errorDetails = {
+            error: errorMsg,
+            input: command || 'Unknown input',
+            chatMessages: chatMessages,
+            output: data
+          };
+          const fullErrorMsg = JSON.stringify(errorDetails, null, 2);
 
-        chatMessages.push(
-          { role: "user", content: command },
-          { role: "assistant", content: aiReply }
-        );
+          appendToContent(`<span class="error-msg">Error: ${errorMsg}</span><br><br>`);
+          await fetch('/api/TelegramSend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: fullErrorMsg })
+          });
 
-      } catch {
-        appendToContent('<span class="error-msg">Error communicating with AI server</span>');
+          currentInputMode = 'sendMessage';
+          createPromptInput(fullErrorMsg);
+        } else {
+          const aiReply = JSON.parse(data.reply);
+          const messageContent = aiReply.message || 'No message content available';
+          appendToContent(`<span class="ai-text">${messageContent}</span><br><br>`);
+          chatMessages.push(
+            { role: "user", content: command },
+            { role: "assistant", content: JSON.stringify(aiReply) }
+          );
+          createPromptInput();
+        }
+      } catch (err) {
+        const errorDetails = {
+          error: "Error connecting to AI server.",
+          input: command || 'Unknown input',
+          chatMessages: chatMessages,
+          output: { error: err.message }
+        };
+        const fullErrorMsg = JSON.stringify(errorDetails, null, 2);
+
+        appendToContent(`<span class="error-msg">Error: ${err.message}</span><br><br>`);
+        await fetch('/api/TelegramSend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: fullErrorMsg })
+        });
+
+        currentInputMode = 'sendMessage';
+        createPromptInput(fullErrorMsg);
       }
-      createPromptInput();
     }
   }
 
   async function handleSendMessage(message) {
-    if (!message) return;
+    if (!message.trim()) {
+      appendToContent(`<span class="error-msg">No message entered. Returning to command mode.</span><br><br>`);
+      currentInputMode = 'command';
+      createPromptInput();
+      return;
+    }
+
     appendToContent(`<span class="sent-msg">Sending message: "${message}"...</span><br>`);
     try {
       const res = await fetch('/api/TelegramSend', {
@@ -186,9 +250,9 @@ window.addEventListener('DOMContentLoaded', () => {
     wrapper.className = 'entry welcome-terminal';
     wrapper.innerHTML = `
       <div style="color:#D28F4B;font-weight:600;">
-        Welcome to my Terminal<br>
-        Copyright (C)koregeloo.ir all rights reserved.<br>
-        Ask the AI assistant (e.g. How to contact me?).<br>
+        Welcome to My Terminal!<br>
+        Interact with the <span style="color: #8be9fd;">AI Assistant</span><br>
+        <span style="font-size: 0.9em;">© 2024 koregeloo.ir — All Rights Reserved.</span>
       </div>
       <div style="color:#D28F4B;font-weight:600;margin-top:4px;">
         Tehran time: <span id="tehran-time-inline"></span>
@@ -212,17 +276,17 @@ window.addEventListener('DOMContentLoaded', () => {
     if (timeSpan) timeSpan.textContent = timeText;
   }
 
-  function closeMobileMenu() {
-    mobileMenu.classList.remove('active');
-    mobileMenu.setAttribute('aria-hidden', 'true');
-    burgerButton.setAttribute('aria-expanded', 'false');
-  }
+  burgerButton?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileMenu.classList.contains('active')) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
 
-  burgerButton?.addEventListener('click', () => {
-    const expanded = burgerButton.getAttribute('aria-expanded') === 'true';
-    burgerButton.setAttribute('aria-expanded', String(!expanded));
-    mobileMenu.classList.toggle('active');
-    mobileMenu.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+  overlay.addEventListener('click', () => {
+    closeMobileMenu();
   });
 
   document.body.addEventListener('click', (e) => {
@@ -231,7 +295,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (link && link.dataset.command) {
       e.preventDefault();
       if (mobileMenu.classList.contains('active')) closeMobileMenu();
-
+      currentInputMode = 'command';
       appendToContentCommand(link.dataset.command.trim());
       executeCommand(link.dataset.command.trim().toLowerCase());
     }
@@ -245,12 +309,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const splash = document.getElementById('splash-screen');
   const setupTerminal = () => {
     appendWelcomeAndTime();
-    currentInputMode = 'sendMessage';
-    appendToContent("Express whatever you wish and press Enter:");
-    createPromptInput('Hi...');
+    createPromptInput();
   };
 
   if (splash) {

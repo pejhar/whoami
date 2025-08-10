@@ -12,10 +12,25 @@
   --burger-pink-dark: #0f2a71;
 }
 
+* {
+  font-family: monospace;
+  font-size: 0.4 em;
+}
+
 html,
 body {
   height: 100%;
   overflow: hidden;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  padding: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .help-box>div,
@@ -32,15 +47,23 @@ body {
   box-sizing: border-box;
 }
 
-body {
-  background: var(--bg-color);
-  color: var(--text-color);
-  font-family: 'Inconsolata', monospace;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 1098;
+}
+
+#overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 .main-wrapper {
@@ -64,9 +87,8 @@ body {
 .content {
   flex-grow: 1;
   height: 100%;
+  padding: 12px;
   overflow-y: auto;
-  padding: 8px 12px;
-  font-size: 1em;
   line-height: 1.5;
   border-left: 2px solid #44475a;
   scrollbar-width: thin;
@@ -89,10 +111,9 @@ body {
 }
 
 .art {
-  font-size: 1.1em;
+  font-size: 0.020 em;
   color: var(--primary-color);
   overflow: hidden;
-  padding: 6px 8px;
   text-shadow: 0 0 4px #149879, 0 0 8px #149879, 0 0 12px #149879;
   animation: glowPulse 2.5s ease-in-out infinite alternate;
   user-select: none;
@@ -132,7 +153,6 @@ body {
   .art-section {
     height: auto;
     max-width: 100%;
-    font-size: 0.9em;
     overflow-x: auto;
   }
 
@@ -146,6 +166,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  .content {
+    padding: 0px;
+  }
+
   .mobile-nav {
     display: block;
     position: fixed;
@@ -166,21 +190,8 @@ body {
     flex-direction: column;
     justify-content: space-around;
     padding: 0;
-    margin: 0;
-    position: relative;
     transition: transform 0.3s ease;
-  }
-
-  .burger-menu:hover span {
-    background: var(--burger-pink-light);
-    box-shadow: 0 0 6px var(--burger-pink-light),
-      0 0 12px var(--burger-pink-light),
-      0 0 18px var(--burger-pink-light);
-    animation-play-state: paused;
-  }
-
-  .burger-menu.active {
-    transform: rotate(90deg);
+    -webkit-tap-highlight-color: transparent;
   }
 
   .burger-menu span {
@@ -191,28 +202,44 @@ body {
     box-shadow: 0 0 3px var(--burger-pink),
       0 0 6px var(--burger-pink),
       0 0 9px var(--burger-pink);
-    text-shadow: 0 0 4px var(--burger-pink),
-      0 0 8px var(--burger-pink),
-      0 0 12px var(--burger-pink);
     animation: glowPulseBlue 2.5s ease-in-out infinite alternate;
-    transition: background 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .burger-menu:hover span {
+    background: var(--burger-pink-light);
+    box-shadow: 0 0 6px var(--burger-pink-light),
+      0 0 12px var(--burger-pink-light),
+      0 0 18px var(--burger-pink-light);
+    animation-play-state: paused;
   }
 
   @keyframes glowPulseBlue {
     0% {
-      text-shadow: 0 0 3px var(--burger-pink),
+      box-shadow: 0 0 3px var(--burger-pink),
         0 0 6px var(--burger-pink),
         0 0 9px var(--burger-pink);
-      color: var(--burger-pink-light);
     }
 
     100% {
-      text-shadow: 0 0 6px var(--burger-pink),
+      box-shadow: 0 0 6px var(--burger-pink),
         0 0 12px var(--burger-pink),
         0 0 18px var(--burger-pink);
-      color: var(--burger-pink-dark);
     }
   }
+
+  .burger-menu.active span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 5px);
+  }
+
+  .burger-menu.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger-menu.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -5px);
+  }
+
 
   .mobile-menu {
     position: fixed;
@@ -225,14 +252,14 @@ body {
     padding: 12px;
     flex-direction: column;
     gap: 10px;
-    font-size: 1.1em;
+    font-size: 1 em;
     z-index: 1099;
     border-radius: 8px;
     border: 1px solid #3f3f3f;
     user-select: text;
 
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateX(100%);
     visibility: hidden;
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
@@ -248,7 +275,6 @@ body {
   .mobile-menu .mobile-menu-title {
     color: var(--burger-pink);
     font-weight: 700;
-    font-size: 1em;
     margin-bottom: 8px;
     display: block;
   }
@@ -277,8 +303,6 @@ body {
   background: transparent;
   border: none;
   color: var(--accent-color);
-  font-size: 1em;
-  font-family: inherit;
   outline: none;
   width: auto;
   min-width: 40%;

@@ -4,6 +4,7 @@ node_modules/
 *.log
 .wrangler/
 *wrangler.toml
+.dev.vars
 .xdg.config/
 .idea/
 .vscode/
