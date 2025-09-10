@@ -122,6 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
               My name is Ahmad Shirzadi. I am a Software Engineer.<br>
               LinkedIn: <a href="https://www.linkedin.com/in/ahmad-shirzadi/" target="_blank">here</a><br>
               GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
+              Email: <a href="mailto:info@koregeloo.ir">info@koregeloo.ir</a><br>
               CV: <a href="/cv_ahmad_shirzadi_august_2025.pdf" target="_blank" download>Download my CV (PDF)</a><br><br>
             </span>
           </div>
