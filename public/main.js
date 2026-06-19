@@ -129,71 +129,54 @@ window.addEventListener('DOMContentLoaded', () => {
 .
 .
 .
-├── Identity
-│   ├── Ahmad Shirzadi
-│   ├── Software Engineer
-│   └── Tehran, Tehran Province, Iran
+├── 2008 - Start
+│   ├── First code written
+│   └── Web basics (PHP/HTML)
 │
-├── Summary (2008 - Present)
-│   ├── 16+ years experience in software development
-│   ├── Continuous learning across programming & DevOps
-│   ├── Passion for system design, backend architecture
-│   └── “Digital nomad in code and imagination”
+├── 2012 - University
+│   ├── BSc Computer Software
+│   └── Foundation: OOP, DB design
 │
-├── Education (2012 - 2015)
-│   └── Shomal University
-│       ├── Bachelor's degree
-│       └── Computer Software Technology / Technician
+├── 2015 - Backend Start
+│   ├── First production APIs
+│   └── MVC + Laravel adoption
 │
-├── Experience
+├── 2017 - ParsaDP
+│   ├── Backend developer role
+│   ├── Location-based platform
+│   └── Server + infra setup
 │
-│   ├── MabnaTelecom (2024 - 2025)
-│   │   ├── Role: Full Stack Engineer
-│   │   ├── Domain: Telecom / ICT Infrastructure
-│   │   ├── Key Systems:
-│   │   │   ├── Cloud B/OSS Admin Panel
-│   │   │   ├── Net Ban Project
-│   │   │   ├── Ticketing Platform
-│   │   │   └── BI Mailer System
-│   │   ├── Contributions:
-│   │   │   ├── Security & scalability improvements
-│   │   │   ├── 25% reduction in ticket resolution time
-│   │   │   └── Automation of internal workflows
-│   │   └── Tech Stack:
-│   │       ├── PHP (Laravel, Core PHP)
-│   │       ├── REST APIs
-│   │       ├── MySQL
-│   │       ├── Docker
-│   │       ├── VMware Cloud Foundation
-│   │       └── Zabbix
-│   │
-│   ├── ParsaDP (2017 - 2021)
-│   │   ├── Role: Back End Developer
-│   │   ├── Domain: Logistics / Location-based platform
-│   │   ├── Achievements:
-│   │   │   ├── Built driver-customer matching platform
-│   │   │   ├── Elasticsearch optimization at scale
-│   │   │   └── Server setup & maintenance from scratch
-│   │   └── Tech Stack:
-│   │       ├── PHP / Laravel
-│   │       ├── MySQL / MongoDB
-│   │       ├── Redis
-│   │       ├── Elasticsearch
-│   │       ├── Linux / Nginx
-│   │       └── Docker
-│   │
-│   └── Freelance / Early Career (2012 - 2017)
-│       ├── First backend systems
-│       ├── API design & web applications
-│       └── Foundation in PHP, MVC, database design
+├── 2019 - Scaling Era
+│   ├── Elasticsearch optimization
+│   ├── Redis caching systems
+│   └── Performance tuning
 │
-└── Core Expertise
-    ├── Backend Architecture
-    ├── Distributed Systems
-    ├── DevOps & Infrastructure
-    ├── Search Engines (Elasticsearch)
-    ├── System Optimization
-    └── Enterprise Software (HIS / Telecom / Logistics)
+├── 2020 - Distributed Systems
+│   ├── Logistical platform evolution
+│   ├── Search engine improvements
+│   └── Data-heavy backend design
+│
+├── 2022 - DevOps Shift
+│   ├── Dockerized systems
+│   ├── CI/CD pipelines
+│   └── Linux infrastructure
+│
+├── 2024 - MabnaTelecom
+│   ├── Full Stack Engineer
+│   ├── B/OSS Admin systems
+│   ├── Ticketing automation
+│   └── Telecom integrations
+│
+├── 2025 - Cloud Era
+│   ├── Cloudflare deployment
+│   ├── Telegram integrations
+│   └── Terminal-style portfolio
+│
+└── 2026 - Personal Dev OS
+    ├── Command-based UI
+    ├── Booking system
+    └── Git-style portfolio evolution
+
               </pre>      
             </span>
           </div>
