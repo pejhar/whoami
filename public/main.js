@@ -99,7 +99,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   async function executeCommand(command) {
     const cmd = command.toLowerCase();
-    const knownCommands = ['sendmessage', 'clear', 'exit', 'aboutme', 'updates'];
+    const knownCommands = ['clear', 'exit', 'aboutme', 'contactme', 'sendmessage', 'updates'];
 
     if (knownCommands.includes(cmd)) {
       switch (cmd) {
@@ -124,10 +124,91 @@ window.addEventListener('DOMContentLoaded', () => {
               GitHub: <a href="https://github.com/pejhar" target="_blank">here</a><br>
               Email: <a href="mailto:info@koregeloo.ir">info@koregeloo.ir</a><br>
               CV: <a href="/cv_ahmad_shirzadi_august_2025.pdf" target="_blank" download>Download my CV (PDF)</a><br><br>
+
+              <pre class="timeline-tree">
+.
+.
+.
+├── Identity
+│   ├── Ahmad Shirzadi
+│   ├── Software Engineer
+│   └── Tehran, Tehran Province, Iran
+│
+├── Summary (2008 - Present)
+│   ├── 16+ years experience in software development
+│   ├── Continuous learning across programming & DevOps
+│   ├── Passion for system design, backend architecture
+│   └── “Digital nomad in code and imagination”
+│
+├── Education (2012 - 2015)
+│   └── Shomal University
+│       ├── Bachelor's degree
+│       └── Computer Software Technology / Technician
+│
+├── Experience
+│
+│   ├── MabnaTelecom (2024 - 2025)
+│   │   ├── Role: Full Stack Engineer
+│   │   ├── Domain: Telecom / ICT Infrastructure
+│   │   ├── Key Systems:
+│   │   │   ├── Cloud B/OSS Admin Panel
+│   │   │   ├── Net Ban Project
+│   │   │   ├── Ticketing Platform
+│   │   │   └── BI Mailer System
+│   │   ├── Contributions:
+│   │   │   ├── Security & scalability improvements
+│   │   │   ├── 25% reduction in ticket resolution time
+│   │   │   └── Automation of internal workflows
+│   │   └── Tech Stack:
+│   │       ├── PHP (Laravel, Core PHP)
+│   │       ├── REST APIs
+│   │       ├── MySQL
+│   │       ├── Docker
+│   │       ├── VMware Cloud Foundation
+│   │       └── Zabbix
+│   │
+│   ├── ParsaDP (2017 - 2021)
+│   │   ├── Role: Back End Developer
+│   │   ├── Domain: Logistics / Location-based platform
+│   │   ├── Achievements:
+│   │   │   ├── Built driver-customer matching platform
+│   │   │   ├── Elasticsearch optimization at scale
+│   │   │   └── Server setup & maintenance from scratch
+│   │   └── Tech Stack:
+│   │       ├── PHP / Laravel
+│   │       ├── MySQL / MongoDB
+│   │       ├── Redis
+│   │       ├── Elasticsearch
+│   │       ├── Linux / Nginx
+│   │       └── Docker
+│   │
+│   └── Freelance / Early Career (2012 - 2017)
+│       ├── First backend systems
+│       ├── API design & web applications
+│       └── Foundation in PHP, MVC, database design
+│
+└── Core Expertise
+    ├── Backend Architecture
+    ├── Distributed Systems
+    ├── DevOps & Infrastructure
+    ├── Search Engines (Elasticsearch)
+    ├── System Optimization
+    └── Enterprise Software (HIS / Telecom / Logistics)
+              </pre>      
             </span>
           </div>
         `);
-          break;
+        break;
+        case 'contactme':
+          appendToContent(`
+            <div class="contact-me">
+              <span class="contact-txt">
+                Send a direct message: <a href="#" data-command="sendmessage">sendMessage</a><br>
+                Schedule a meeting: <a href="#" data-command="sendmessage">bookMeeting</a><br>
+              </span>
+            </div>
+          `);
+        break;
         case 'updates':
           appendToContent(`
           <div class="about-me">
