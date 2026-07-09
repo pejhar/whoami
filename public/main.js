@@ -99,7 +99,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   async function executeCommand(command) {
     const cmd = command.toLowerCase();
-    const knownCommands = ['clear', 'exit', 'aboutme', 'contactme', 'sendmessage', 'updates'];
+    const knownCommands = [
+      'clear',
+      'exit',
+      'aboutme',
+      'contactme',
+      'sendmessage',
+      'updates',
+      'bookmeeting'
+    ];
 
     if (knownCommands.includes(cmd)) {
       switch (cmd) {
@@ -187,23 +195,29 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="contact-me">
               <span class="contact-txt">
                 Send a direct message: <a href="#" data-command="sendmessage">sendMessage</a><br>
-                Schedule a meeting: <a href="#" data-command="sendmessage">bookMeeting</a><br>
+                Schedule a meeting: <a href="#" data-command="bookmeeting">bookMeeting</a>
               </span>
             </div>
           `);
         break;
         case 'updates':
           appendToContent(`
-          <div class="about-me">
-            <span class="about-txt">
-              Latest updates:<br>
-              - AI assistant integrated into the terminal.<br>
-              - Chat Crash Reporter.<br>
-              - Ability to send messages directly to Telegram.<br>
-              Stay tuned for more features!<br><br>
-            </span>
-          </div>
-        `);
+            <div class="about-me">
+              <span class="about-txt">
+                Latest updates:<br>
+                - AI assistant integrated into the terminal.<br>
+                - Chat Crash Reporter.<br>
+                - Ability to send messages directly to Telegram.<br>
+                Stay tuned for more features!<br><br>
+              </span>
+            </div>
+          `);
+          break;
+        case 'bookmeeting':
+          window.open(
+            'https://calendly.com/koregeloo/30min',
+            '_blank'
+          );
           break;
       }
       createPromptInput();
